@@ -1,7 +1,7 @@
 FROM python:3.8
 
 ENV MICRO_SERVICE=/home/app/webapp
-# set work directory for the docker Microservice
+# set work directory for the docker Microservice.
 RUN mkdir -p $MICRO_SERVICE
 # where your code lives
 WORKDIR $MICRO_SERVICE
