@@ -1,5 +1,5 @@
 pipeline {
-    agent {label 'agent'}
+    agent any
         stages{
         stage("Git Clone"){
             steps{
@@ -8,25 +8,25 @@ pipeline {
         }
         stage("Create Docker Image"){
             steps{
-		echo "Build and Test"
-		withCredentials([usernamePassword(credentialsId:"dockerhub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
-		sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                sh "docker build -t kshitibartakke/calculategrowth ."
-		}
+                echo "Build and Test"
+                withCredentials([usernamePassword(credentialsId:"dockerhub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
+                    sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
+                    sh "docker build -t ramjanaki15/calculategrowth ."
+                    }
             }
         }
          stage("Push DockerImage to DockrHub"){
             steps{
                 withCredentials([usernamePassword(credentialsId:"dockerhub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
-                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                sh "docker images"
-		sh "docker push kshitibartakke/calculategrowth:latest"
-		}
-	    }
-	}
+                    sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
+                    sh "docker images"
+                    sh "docker push ramjanaki15/calculategrowth:latest"
+                }
+            }
+        }
         stage("Deploy Using DOcker Compose"){
             steps{   
-		 sh "docker-compose down && docker-compose up -d"           
+                 sh "docker ps"           
                 }
             }
         }
